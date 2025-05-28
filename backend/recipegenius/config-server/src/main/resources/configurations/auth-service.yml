@@ -1,0 +1,18 @@
+server:
+  port: 8025
+keycloak:
+  auth-server-url: http://localhost:9090
+  realm: recipegenius
+  resource: recipegenius
+  credentials:
+    secret: ASaKrOhvMgkwa5OoYfm6Wnjil7paHpCt
+  admin:
+    username: xpp
+    password: xpp
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://localhost:9090/realms/recipegenius"
