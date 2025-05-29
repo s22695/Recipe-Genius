@@ -3,7 +3,7 @@ server:
 keycloak:
   auth-server-url: http://localhost:9090
   realm: recipegenius
-  resource: recipegenius
+  client: recipegenius
   credentials:
     secret: ASaKrOhvMgkwa5OoYfm6Wnjil7paHpCt
   admin:
