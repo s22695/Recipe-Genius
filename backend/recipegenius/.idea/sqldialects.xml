@@ -2,6 +2,8 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/client-service/src/main/resources/db/migration/V1__init_database.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/recipe/src/main/resources/db/migration/V1__create_ingredient_category.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/recipe/src/main/resources/db/migration/V2__insert_ingredient_categories.sql" dialect="PostgreSQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>
 </project>
