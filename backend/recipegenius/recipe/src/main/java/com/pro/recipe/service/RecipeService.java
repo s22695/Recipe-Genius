@@ -10,6 +10,7 @@ import com.pro.recipe.repository.IngredientRepository;
 import com.pro.recipe.repository.RecipeIngredientRepository;
 import com.pro.recipe.repository.RecipeRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -65,10 +66,6 @@ public class RecipeService {
                 .toList();
     }
 
-    public void deleteRecipe(Long id) {
-        recipeRepo.deleteById(id);
-    }
-
     public RecipeResponse addIngredientToRecipe(Long recipeId, Long ingredientId) {
         Recipe recipe = recipeRepo.findById(recipeId)
                 .orElseThrow(() -> new IllegalArgumentException("Przepis %d nie istnieje".formatted(recipeId)));
@@ -85,6 +82,14 @@ public class RecipeService {
     public RecipeResponse removeIngredientFromRecipe(Long recipeId, Long ingredientId) {
         recipeIngRepo.deleteById(new RecipeIngredientId(recipeId, ingredientId));
         return getRecipe(recipeId);
+    }
+
+    @Transactional
+    public void deleteRecipe(Long id) {
+        if (!recipeRepo.existsById(id)) {
+            throw new EntityNotFoundException("Nieznaleziono " + id + " przepisu");
+        }
+        recipeRepo.deleteById(id);
     }
 
     private void addIngredientsInternal(Recipe recipe, List<Long> ingredientIds) {

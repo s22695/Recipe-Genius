@@ -6,36 +6,52 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /**
-     * 401, 403, 404, 409… every HttpClientErrorException from RestTemplate
-     */
     @ExceptionHandler(HttpClientErrorException.class)
-    public Mono<ResponseEntity<ApiError>> handleHttpClientError(HttpClientErrorException ex) {
-        HttpStatus status = (HttpStatus) ex.getStatusCode();
-        String raw = ex.getResponseBodyAsString();
-        String msg = (raw != null && !raw.isBlank()) ? raw : ex.getStatusText();
-        log.error("{} {} from external service: {}", status.value(), status.getReasonPhrase(), msg, ex);
+    public Mono<ResponseEntity<ApiError>> handleHttpClient(HttpClientErrorException ex) {
 
-        ApiError body = new ApiError(status, msg);
-        return Mono.just(ResponseEntity
-                .status(status)
-                .body(body));
+        HttpStatus status = (HttpStatus) ex.getStatusCode();      // 400, 401, 403…
+        String body       = ex.getResponseBodyAsString();
+
+        String msg = (body != null && !body.isBlank())
+                ? body
+                : ex.getStatusText();
+
+        log.warn("Keycloak {} {}: {}", status.value(), status.getReasonPhrase(), msg);
+
+        return build(status, msg);
     }
 
-    // 500 Internal Server Error – catch-all
+    @ExceptionHandler(WebClientResponseException.class)
+    public Mono<ResponseEntity<ApiError>> handleKeycloak(WebClientResponseException ex) {
+        HttpStatus status = (HttpStatus) ex.getStatusCode();
+        String msg = ex.getResponseBodyAsString();
+        if (msg == null || msg.isBlank()) msg = status.getReasonPhrase();
+        return build(status, msg);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public Mono<ResponseEntity<ApiError>> handleNotFound(ResponseStatusException ex) {
+        if (ex.getStatusCode() != HttpStatus.NOT_FOUND) throw ex;
+        return build(HttpStatus.NOT_FOUND, "Ścieżka nie istnieje");
+    }
+
     @ExceptionHandler(Exception.class)
-    public Mono<ResponseEntity<ApiError>> handleAll(Exception ex) {
-        log.error("500 Internal Server Error", ex);
-        ApiError body = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error");
-        return Mono.just(ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(body));
+    public Mono<ResponseEntity<ApiError>> handleGeneric(Exception ex) {
+        log.error("Nieobsłużony wyjątek", ex);
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, "Wewnętrzny błąd serwera");
+    }
+
+    private Mono<ResponseEntity<ApiError>> build(HttpStatus status, String msg) {
+        ApiError body = new ApiError(status, msg);
+        return Mono.just(ResponseEntity.status(status).body(body));
     }
 }
 
