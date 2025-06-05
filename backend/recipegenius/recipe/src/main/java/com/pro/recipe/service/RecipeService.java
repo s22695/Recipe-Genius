@@ -1,5 +1,6 @@
 package com.pro.recipe.service;
 
+import com.pro.recipe.DTO.RecipeIdsRequest;
 import com.pro.recipe.DTO.RecipeRequest;
 import com.pro.recipe.DTO.RecipeResponse;
 import com.pro.recipe.entity.Ingredient;
@@ -8,6 +9,8 @@ import com.pro.recipe.entity.RecipeIngredientId;
 import com.pro.recipe.repository.IngredientRepository;
 import com.pro.recipe.repository.RecipeIngredientRepository;
 import com.pro.recipe.repository.RecipeRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,14 +25,30 @@ public class RecipeService {
     private final RecipeRepository recipeRepo;
     private final IngredientRepository ingredientRepo;
     private final RecipeIngredientRepository recipeIngRepo;
-    private final RecipeMapper               mapper;
+    private final RecipeMapper mapper;
+    @PersistenceContext
+    private final EntityManager em;
 
     public RecipeResponse createRecipe(RecipeRequest req, String creatorId) {
         Recipe recipe = mapper.toRecipe(req);
         recipe.setCreatorId(creatorId);
-        //recipe = recipeRepo.save(recipe);
-        addIngredientsInternal(recipe, req.ingredientIds());
-        return mapper.fromRecipe(recipeRepo.findById(recipe.getId()).orElseThrow());
+        Recipe recipeSaved = recipeRepo.save(recipe);
+        addIngredientsInternal(recipeSaved, req.ingredientIds());
+
+        em.flush();
+        em.refresh(recipeSaved);
+
+        System.out.println(recipeSaved);
+        return mapper.fromRecipe(recipeRepo.findById(recipeSaved.getId()).orElseThrow());
+    }
+
+    public List<RecipeResponse> getRecipesByIds(RecipeIdsRequest req) {
+
+        List<Recipe> recipes = recipeRepo.findAllWithIngredients(req.ids());
+
+        return recipes.stream()
+                .map(mapper::fromRecipe)
+                .toList();
     }
 
     public RecipeResponse getRecipe(Long id) {

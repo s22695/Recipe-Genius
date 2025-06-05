@@ -7,10 +7,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "ingredient_category")
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class IngredientCategory {
 
     @Id

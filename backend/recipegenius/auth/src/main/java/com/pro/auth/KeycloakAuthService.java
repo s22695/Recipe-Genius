@@ -78,22 +78,6 @@ public class KeycloakAuthService {
         return restTemplate.postForEntity(tokenUrl, request, Map.class);
     }
 
-    public ResponseEntity<?> getNewRefreshToken(RefreshRequest req) {
-        String tokenUrl = String.format("%s/realms/%s/protocol/openid-connect/token", authServerUrl, realm);
-
-        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
-        form.add("grant_type", "refresh_token");
-        form.add("client_id", clientId);
-        form.add("client_secret", clientSecret);
-        form.add("refresh_token", req.refreshToken());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(form, headers);
-        return restTemplate.postForEntity(tokenUrl, request, Map.class);
-    }
-
     public ResponseEntity<?> createUser(CreateUserRequest req) {
         String tokenUrl = String.format("%s/realms/%s/protocol/openid-connect/token", authServerUrl, realm);
 

@@ -1,5 +1,6 @@
 package com.pro.recipe.service;
 
+import com.pro.recipe.DTO.IngredientResponse;
 import com.pro.recipe.DTO.RecipeRequest;
 import com.pro.recipe.DTO.RecipeResponse;
 import com.pro.recipe.entity.Ingredient;
@@ -21,12 +22,11 @@ public class RecipeMapper {
             return null;
         }
         return Recipe.builder()
-                .id(req.id())
-                .creatorId(req.creatorId())
                 .imageData(req.imageData())
                 .prepTime(req.prepTime())
                 .difficulty(req.difficulty())
                 .description(req.description())
+                .steps(req.steps())
                 .build();
     }
 
@@ -34,10 +34,20 @@ public class RecipeMapper {
         if (recipe == null) {
             return null;
         }
-        List<Long> ingredientIds = recipe.getRecipeIngredients()
-                .stream()
-                .map(ri -> ri.getIngredient().getId())
-                .toList();
+        List<IngredientResponse> ingredients = (
+                recipe.getRecipeIngredients() == null
+                        ? List.of()
+                        : recipe.getRecipeIngredients().stream()
+                        .map(ri -> {
+                            var ing = ri.getIngredient();
+                            return new IngredientResponse(
+                                    ing.getId(),
+                                    ing.getIngredientName(),
+                                    ing.getCategory().getIngredientName()
+                            );
+                        })
+                        .toList()
+        );
 
         return new RecipeResponse(
                 recipe.getId(),
@@ -45,7 +55,8 @@ public class RecipeMapper {
                 recipe.getPrepTime(),
                 recipe.getDifficulty(),
                 recipe.getDescription(),
-                ingredientIds
+                recipe.getSteps(),
+                ingredients
         );
     }
 

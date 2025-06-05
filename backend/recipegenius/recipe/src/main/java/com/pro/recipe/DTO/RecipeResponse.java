@@ -8,5 +8,6 @@ public record RecipeResponse(
         String prepTime,
         String difficulty,
         String description,
-        List<Long> ingredientIds
+        String steps,
+        List<IngredientResponse> ingredients
 ) { }

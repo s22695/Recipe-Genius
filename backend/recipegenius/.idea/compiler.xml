@@ -11,17 +11,6 @@
         <module name="discovery" />
       </profile>
       <profile name="client-service" enabled="true" />
-      <profile name="Annotation profile for auth" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath>
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
-        </processorPath>
-        <module name="auth" />
-        <module name="gateway" />
-        <module name="client-service" />
-      </profile>
       <profile name="Annotation profile for recipe" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -30,6 +19,9 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
         <module name="recipe" />
+        <module name="auth" />
+        <module name="gateway" />
+        <module name="client-service" />
       </profile>
     </annotationProcessing>
   </component>

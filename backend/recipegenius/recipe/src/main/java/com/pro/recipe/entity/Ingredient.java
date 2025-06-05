@@ -5,10 +5,11 @@ import lombok.*;
 
 @Entity
 @Table(name = "ingredient")
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Ingredient {
 
     @Id

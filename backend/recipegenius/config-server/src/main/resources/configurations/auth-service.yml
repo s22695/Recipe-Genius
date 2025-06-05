@@ -5,10 +5,10 @@ keycloak:
   realm: recipegenius
   client: recipegenius
   credentials:
-    secret: ASaKrOhvMgkwa5OoYfm6Wnjil7paHpCt
+    secret: d9FB9gC5ea13UzM38HdcGaniSe7oVdhR
   admin:
-    username: xpp
-    password: xpp
+    username: xdd
+    password: xdd
 
 spring:
   security:
@@ -16,3 +16,8 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: "http://localhost:9090/realms/recipegenius"
+
+
+
+
+

@@ -6,9 +6,10 @@ import lombok.*;
 import java.io.Serializable;
 
 @Embeddable
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class RecipeIngredientId implements Serializable {
     private Long recipeId;
     private Long ingredientId;

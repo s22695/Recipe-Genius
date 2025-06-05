@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS recipe
 (
-    id          SERIAL PRIMARY KEY,
+    id          BIGSERIAL PRIMARY KEY,
     creator_id  VARCHAR(36) NOT NULL,
     image_data  BYTEA,
     prep_time   VARCHAR(50),
@@ -14,9 +14,9 @@ CREATE INDEX IF NOT EXISTS idx_recipe_creator
 
 CREATE TABLE IF NOT EXISTS recipe_ingredient
 (
-    recipe_id     INTEGER NOT NULL
+    recipe_id     BIGINT NOT NULL
         REFERENCES recipe (id) ON DELETE CASCADE,
-    ingredient_id INTEGER NOT NULL
+    ingredient_id BIGINT NOT NULL
         REFERENCES ingredient (id) ON DELETE RESTRICT,
     PRIMARY KEY (recipe_id, ingredient_id)
 );

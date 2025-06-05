@@ -5,13 +5,6 @@ import jakarta.validation.constraints.*;
 import java.util.List;
 
 public record RecipeRequest(
-        @Positive(message = "Id musi być liczbą dodatnią")
-        Long id,
-
-        @NotBlank(message = "creatorId jest wymagane")
-        @Size(min = 36, max = 36, message = "creatorId musi mieć dokładnie 36 znaków (UUID)")
-        String creatorId,
-
         byte[] imageData,
 
         @NotBlank(message = "prepTime jest wymagane")
@@ -25,7 +18,11 @@ public record RecipeRequest(
         @NotBlank(message = "description jest wymagana")
         String description,
 
+        @NotBlank(message = "steps są wymagane")
+        String steps,
+
         @NotEmpty(message = "ingredientIds nie może być puste")
         List<@Positive(message = "ingredientId musi być dodatni") Long> ingredientIds
-) {}
+) {
+}
 
