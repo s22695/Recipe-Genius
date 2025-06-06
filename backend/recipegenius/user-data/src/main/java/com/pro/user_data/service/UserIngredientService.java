@@ -1,8 +1,9 @@
 package com.pro.user_data.service;
 
+import com.pro.user_data.DTO.IngredientResponse;
 import com.pro.user_data.DTO.RecipeResponse;
 import com.pro.user_data.DTO.RecipeResponseWithPercentage;
-import com.pro.user_data.DTO.UserIngredientRequest;
+import com.pro.user_data.DTO.IngredientRequest;
 import com.pro.user_data.entity.UserIngredient;
 import com.pro.user_data.recipe.RecipeClient;
 import com.pro.user_data.repository.UserIngredientRepository;
@@ -23,14 +24,14 @@ public class UserIngredientService {
     private final RecipeClient recipeClient;
 
     @Transactional
-    public void addIngredients(Authentication auth, UserIngredientRequest req) {
-        req.ingredientIds().forEach(id ->
+    public void addIngredients(Authentication auth, IngredientRequest req) {
+        req.ids().forEach(id ->
                 repo.save(new UserIngredient(auth.getName(), id)));
     }
 
     @Transactional
-    public void deleteIngredients(Authentication auth, UserIngredientRequest req) {
-        req.ingredientIds().forEach(id ->
+    public void deleteIngredients(Authentication auth, IngredientRequest req) {
+        req.ids().forEach(id ->
                 repo.deleteByIdUserIdAndIdIngredientId(auth.getName(), id));
     }
 
@@ -68,5 +69,16 @@ public class UserIngredientService {
                 r.steps(),
                 r.ingredients()
         );
+    }
+
+    @Transactional
+    public List<IngredientResponse> getMyIngredients(Authentication auth) {
+        List<Long> myIngredientIds = repo.findByIdUserId(auth.getName())
+                .stream()
+                .map(ui -> ui.getId().getIngredientId())
+                .collect(Collectors.toList());
+
+        IngredientRequest req = new IngredientRequest(myIngredientIds);
+        return recipeClient.getAllIngredientByIds(req);
     }
 }

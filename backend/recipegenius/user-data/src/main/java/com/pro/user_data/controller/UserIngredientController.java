@@ -1,6 +1,6 @@
 package com.pro.user_data.controller;
 
-import com.pro.user_data.DTO.UserIngredientRequest;
+import com.pro.user_data.DTO.IngredientRequest;
 import com.pro.user_data.service.UserIngredientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +18,14 @@ public class UserIngredientController {
     @PostMapping("/add")
     public ResponseEntity<Void> addIngredient(
             Authentication authentication,
-            @RequestBody @Valid UserIngredientRequest req) {
+            @RequestBody @Valid IngredientRequest req) {
         service.addIngredients(authentication, req);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteIngredient(Authentication auth,
-                                                 @RequestBody @Valid UserIngredientRequest req) {
+                                                 @RequestBody @Valid IngredientRequest req) {
         service.deleteIngredients(auth, req);
         return ResponseEntity.noContent().build();
     }

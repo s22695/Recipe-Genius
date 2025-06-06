@@ -1,10 +1,7 @@
 package com.pro.user_data.controller;
 
-import DTO.UserIngredientRequest;
-import DTO.UserRecipeRequest;
+import com.pro.user_data.DTO.IngredientRequest;
 import com.pro.user_data.DTO.IngredientResponse;
-import com.pro.user_data.DTO.RecipeResponse;
-import com.pro.user_data.DTO.RecipeResponseWithPercentage;
 import com.pro.user_data.recipe.RecipeClient;
 import com.pro.user_data.service.UserIngredientService;
 import jakarta.validation.Valid;
@@ -24,14 +21,14 @@ public class UserRecipeController {
     private final RecipeClient recipeClient;
 
     @GetMapping("/add")
-    public ResponseEntity<List<RecipeResponseWithPercentage>> addRecipe(
+    public ResponseEntity<List<IngredientResponse>> addRecipe(
             Authentication authentication) {
-        return ResponseEntity.ok(service.getRecipesWithMatchPercent(authentication));
+        return ResponseEntity.ok(service.getMyIngredients(authentication));
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteRecipe(Authentication auth,
-                                             @RequestBody @Valid UserIngredientRequest req) {
+                                             @RequestBody @Valid IngredientRequest req) {
         //service.deleteIngredients(auth, req);
         return ResponseEntity.noContent().build();
     }
