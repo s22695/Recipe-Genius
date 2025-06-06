@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -48,6 +49,7 @@ public class UserRecipeService {
 
         return recipes.stream()
                 .map(rec -> mapWithPercent(rec, myIngredientIds))
+                .sorted(Comparator.comparing(RecipeResponseWithPercentage::percentage).reversed())
                 .toList();
     }
 
