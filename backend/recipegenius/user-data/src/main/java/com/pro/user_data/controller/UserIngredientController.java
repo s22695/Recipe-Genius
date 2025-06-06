@@ -1,12 +1,15 @@
 package com.pro.user_data.controller;
 
 import com.pro.user_data.DTO.IngredientRequest;
+import com.pro.user_data.DTO.IngredientResponse;
 import com.pro.user_data.service.UserIngredientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user-ingredient")
@@ -28,5 +31,17 @@ public class UserIngredientController {
                                                  @RequestBody @Valid IngredientRequest req) {
         service.deleteIngredients(auth, req);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/allFavorites")
+    public ResponseEntity<List<IngredientResponse>> allFavorites(
+            Authentication authentication) {
+        return ResponseEntity.ok(service.getMyIngredients(authentication));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<IngredientResponse>> all(
+            Authentication authentication) {
+        return ResponseEntity.ok(service.getAllIngredients());
     }
 }

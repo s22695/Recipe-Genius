@@ -7,5 +7,5 @@ import java.util.List;
 
 public record UserRecipeRequest(
         @NotEmpty(message = "ingredientIds nie mogą być puste")
-        List<@Positive(message = "ingredientId musi być dodatni") Long> ingredientIds
+        List<@Positive(message = "ingredientId musi być dodatni") Long> ids
 ) {}

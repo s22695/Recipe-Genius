@@ -3,6 +3,7 @@ package com.pro.user_data.recipe;
 import com.pro.user_data.DTO.IngredientResponse;
 import com.pro.user_data.DTO.RecipeResponse;
 import com.pro.user_data.DTO.IngredientRequest;
+import com.pro.user_data.DTO.UserRecipeRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,4 +24,7 @@ public interface RecipeClient {
 
     @PostMapping("/getAllIngredientByIds")
     List<IngredientResponse> getAllIngredientByIds(@RequestBody IngredientRequest req);
+
+    @PostMapping("/getAllRecipeByIds")
+    List<RecipeResponse> getAllRecipeByIds(@RequestBody UserRecipeRequest req);
 }

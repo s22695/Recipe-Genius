@@ -48,6 +48,13 @@ public class RecipeController {
         return ResponseEntity.ok(ingredientService.getAllIngredientsByIds(req));
     }
 
+    @PostMapping("/getAllRecipeByIds")
+    public ResponseEntity<List<RecipeResponse>> getAllRecipeByIds(
+            @RequestBody @Valid RecipeIdsRequest req
+    ) {
+        return ResponseEntity.ok(recipeService.getRecipesByIds(req));
+    }
+
     @PostMapping("/batch")
     public ResponseEntity<List<RecipeResponse>> getRecipesByIds(
             @RequestBody @Valid RecipeIdsRequest req) {

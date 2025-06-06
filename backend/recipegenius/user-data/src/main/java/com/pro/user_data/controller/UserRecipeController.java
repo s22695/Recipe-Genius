@@ -1,9 +1,8 @@
 package com.pro.user_data.controller;
 
-import com.pro.user_data.DTO.IngredientRequest;
-import com.pro.user_data.DTO.IngredientResponse;
-import com.pro.user_data.recipe.RecipeClient;
-import com.pro.user_data.service.UserIngredientService;
+import com.pro.user_data.DTO.RecipeResponseWithPercentage;
+import com.pro.user_data.DTO.UserRecipeRequest;
+import com.pro.user_data.service.UserRecipeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,27 +16,33 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserRecipeController {
 
-    private final UserIngredientService service;
-    private final RecipeClient recipeClient;
+    private final UserRecipeService service;
 
-    @GetMapping("/add")
-    public ResponseEntity<List<IngredientResponse>> addRecipe(
-            Authentication authentication) {
-        return ResponseEntity.ok(service.getMyIngredients(authentication));
+    @PostMapping("/add")
+    public ResponseEntity<Void> addRecipe(
+            Authentication authentication,
+            @RequestBody @Valid UserRecipeRequest req) {
+        service.addRecipe(authentication, req);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteRecipe(Authentication auth,
-                                             @RequestBody @Valid IngredientRequest req) {
-        //service.deleteIngredients(auth, req);
+                                             @RequestBody @Valid UserRecipeRequest req) {
+        service.deleteRecipe(auth, req);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/allFavorites")
-    public ResponseEntity<Void> allFavorites(
+    public ResponseEntity<List<RecipeResponseWithPercentage>> allFavorites(
             Authentication authentication) {
-        //service.addIngredients(authentication, body);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(service.getMyRecipesWithMatchPercent(authentication));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<RecipeResponseWithPercentage>> all(
+            Authentication authentication) {
+        return ResponseEntity.ok(service.getRecipesWithMatchPercent(authentication));
     }
 }
 
