@@ -45,7 +45,7 @@ public class RecipeService {
 
     public List<RecipeResponse> getRecipesByIds(RecipeIdsRequest req) {
 
-        List<Recipe> recipes = recipeRepo.findAllWithIngredients(req.ids());
+        List<Recipe> recipes = recipeRepo.findByIdIn(req.ids());
 
         return recipes.stream()
                 .map(mapper::fromRecipe)

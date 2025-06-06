@@ -1,8 +1,9 @@
-package com.pro.recipe.handler;
+package com.pro.user_data.handler;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -50,12 +51,12 @@ public class GlobalExceptionHandler {
         return new ApiError(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ExceptionHandler(NoResourceFoundException.class)
     ApiError handleMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
         return new ApiError(HttpStatus.BAD_REQUEST, "Sciezka nie istnieje.");
     }
 
-    @ExceptionHandler(NoResourceFoundException.class)
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     ApiError handleMethodNotSupported2(HttpRequestMethodNotSupportedException ex) {
         return new ApiError(HttpStatus.BAD_REQUEST, "Sciezka nie istnieje.");
     }

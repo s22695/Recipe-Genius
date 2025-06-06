@@ -8,21 +8,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
-        <module name="discovery" />
-      </profile>
-      <profile name="client-service" enabled="true" />
-      <profile name="Annotation profile for recipe" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath>
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
-        </processorPath>
-        <module name="recipe" />
         <module name="auth" />
+        <module name="discovery" />
+        <module name="recipe" />
+        <module name="user-data" />
         <module name="gateway" />
         <module name="client-service" />
       </profile>
+      <profile name="client-service" enabled="true" />
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
@@ -33,6 +26,7 @@
       <module name="discovery" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="recipe" options="-parameters" />
+      <module name="user-data" options="-parameters" />
     </option>
   </component>
 </project>
