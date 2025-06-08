@@ -52,6 +52,7 @@ public class RecipeMapper {
         return new RecipeResponse(
                 recipe.getId(),
                 recipe.getCreatorId(),
+                recipe.getImageData(),
                 recipe.getPrepTime(),
                 recipe.getDifficulty(),
                 recipe.getDescription(),

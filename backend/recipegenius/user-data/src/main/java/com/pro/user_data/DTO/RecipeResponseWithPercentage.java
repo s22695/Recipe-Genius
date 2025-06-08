@@ -6,6 +6,7 @@ public record RecipeResponseWithPercentage(
         Long id,
         Double percentage,
         String creatorId,
+        byte[] imageData,
         String prepTime,
         String difficulty,
         String description,
